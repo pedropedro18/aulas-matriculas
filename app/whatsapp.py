@@ -5,6 +5,9 @@ URL = f"https://graph.facebook.com/v20.0/{WA_PHONE_ID}/messages"
 
 
 def enviar(telefone: str, texto: str) -> None:
+    if not WA_TOKEN or not WA_PHONE_ID:
+        print("[erro WhatsApp] WA_TOKEN ou WA_PHONE_ID não configurados")
+        return
     try:
         r = httpx.post(
             URL,
