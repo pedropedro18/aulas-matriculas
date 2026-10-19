@@ -4,10 +4,10 @@ from fastapi import FastAPI, Request, Response, HTTPException
 from apscheduler.schedulers.background import BackgroundScheduler
 from sqlalchemy import select
 
-from .app.config import VERIFY_TOKEN, ADMIN_NUMBER, PRECO_KZ, IBAN, NIVEIS
-from .app.db import Session, Aluno, Pagamento, Aula, criar_tabelas
-from .app.lembretes import verificar_lembretes
-from .whatsapp import enviar
+from app.config import VERIFY_TOKEN, ADMIN_NUMBER, PRECO_KZ, IBAN, NIVEIS
+from app.db import Session, Aluno, Pagamento, Aula, criar_tabelas
+from app.lembretes import verificar_lembretes
+from whatsapp import enviar
 
 
 @asynccontextmanager
@@ -21,6 +21,11 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+
+@app.get("/")
+def raiz():
+    return {"status": "online"}
 
 
 @app.get("/webhook")
@@ -84,6 +89,8 @@ def tratar(db, tel: str, texto: str, tipo: str):
                 .where(Pagamento.aluno_id == aluno.id, Pagamento.estado == "pendente")
                 .order_by(Pagamento.id.desc())
             )
+            if not pag:
+                return enviar(tel, "Não encontrei pagamento pendente. Fala com o Teacher Pedro.")
             enviar(ADMIN_NUMBER, f"💰 Comprovativo de {aluno.nome} ({aluno.nivel}), "
                                  f"pagamento #{pag.id}. Responde /confirmar {pag.id}")
             return enviar(tel, "Recebido! Vamos confirmar o pagamento em breve. ✅")
