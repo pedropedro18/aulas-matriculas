@@ -7,7 +7,7 @@ from sqlalchemy import select
 from app.config import VERIFY_TOKEN, ADMIN_NUMBER, PRECO_KZ, IBAN, NIVEIS
 from app.db import Session, Aluno, Pagamento, Aula, criar_tabelas
 from app.lembretes import verificar_lembretes
-from whatsapp import enviar
+from app.whatsapp import enviar
 
 
 @asynccontextmanager
