@@ -8,6 +8,7 @@ from .config import VERIFY_TOKEN, ADMIN_NUMBER, PRECO_KZ, IBAN, NIVEIS
 from .db import Session, Aluno, Pagamento, Aula, criar_tabelas
 from .lembretes import verificar_lembretes
 from .whatsapp import enviar
+from .wa_links import router as wa_router
 
 
 @asynccontextmanager
@@ -21,6 +22,12 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+app.include_router(wa_router)  # painel /admin (envio por links wa.me)
+
+
+@app.get("/")
+def raiz():
+    return {"estado": "online"}
 
 
 @app.get("/webhook")
