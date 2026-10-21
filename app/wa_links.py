@@ -39,12 +39,12 @@ def gerar_link_whatsapp(numero: str, mensagem: str) -> str:
 
 def mensagem_aula(nome: str, aula: Aula) -> str:
     texto = (
-        f"Olá {nome or ''}! 👋 Lembrete: aula de inglês ({aula.nivel}) "
+        f"Olá {nome or ''}! Lembrete: aula de inglês ({aula.nivel}) "
         f"no dia {aula.inicio:%d/%m} às {aula.inicio:%H:%M}."
     )
     if aula.link:
         texto += f"\nLink: {aula.link}"
-    return texto + "\nAté já! 📚"
+    return texto + "\nAté já!"
 
 
 def verificar_chave(chave: str):
